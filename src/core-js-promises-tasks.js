@@ -133,18 +133,10 @@ function getAllResult(promises) {
  * [promise1, promise4, promise3, promise2] => Promise.resolved('10403020')
  */
 function queuePromises(promises) {
-  let result = '';
-  let chain = Promise.resolve();
-
-  promises.forEach((promise) => {
-    chain = chain.then(() => {
-      return promise.then((value) => {
-        result += value;
-      });
-    });
-  });
-
-  return chain.then(() => result);
+  return promises.reduce(
+    (acc, curr) => acc.then((str) => curr.then((value) => str + value)),
+    Promise.resolve('')
+  );
 }
 
 module.exports = {
